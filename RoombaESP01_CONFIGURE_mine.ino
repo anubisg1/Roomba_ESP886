@@ -225,10 +225,16 @@ void sendInfoRoomba()
   battery_Total_mAh = tempBuf[1]+256*tempBuf[0];
   if(battery_Total_mAh != 0)
   {
-    int nBatPcent = 100*battery_Current_mAh/battery_Total_mAh;
-    String temp_str2 = String(nBatPcent);
-    temp_str2.toCharArray(battery_percent_send, temp_str2.length() + 1); //packaging up the data to publish to mqtt
-    client.publish(TopicBattery.c_str(), battery_percent_send);
+    if (  nBatPcent >= 0 && nBatPcent <= 100 )
+    {
+      String temp_str2 = String(nBatPcent);
+      temp_str2.toCharArray(battery_percent_send, temp_str2.length() + 1); //packaging up the data to publish to mqtt
+      client.publish(TopicBattery.c_str(), battery_percent_send);
+    }
+    else
+    {
+      client.publish(TopicBattery.c_str(), "INVALID");
+    }
   }
   if(battery_Total_mAh == 0)
   {
