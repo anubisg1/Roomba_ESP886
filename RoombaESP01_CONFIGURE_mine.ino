@@ -232,18 +232,17 @@ void sendInfoRoomba()
       temp_str2.toCharArray(battery_percent_send, temp_str2.length() + 1); //packaging up the data to publish to mqtt
       client.publish(TopicBattery.c_str(), battery_percent_send);
     }
-    else
-    {
-      client.publish(TopicBattery.c_str(), "INVALID");
-    }
   }
   if(battery_Total_mAh == 0)
   {
     client.publish(TopicBattery.c_str(), "NO DATA");
   }
-  String temp_str = String(battery_Voltage);
-  temp_str.toCharArray(battery_Current_mAh_send, temp_str.length() + 1); //packaging up the data to publish to mqtt
-  client.publish(TopicCharging.c_str(), battery_Current_mAh_send);
+  if( battery_Voltage >= 0 && battery_Voltage <= 5)
+  {
+    String temp_str = String(battery_Voltage);
+    temp_str.toCharArray(battery_Current_mAh_send, temp_str.length() + 1); //packaging up the data to publish to mqtt
+    client.publish(TopicCharging.c_str(), battery_Current_mAh_send);
+  }
 }
 
 void stayAwakeLow()
